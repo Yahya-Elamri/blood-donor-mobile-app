@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- En-tête bleu -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@color/primary_blue"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_blood_drop"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Inscription du personnel hospitalier"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Contenu du formulaire -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            app:layout_constraintTop_toBottomOf="@id/header">
+
+            <!-- Titre section personnelles -->
+            <TextView
+                android:id="@+id/personalInfoTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Informations personnelles"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Zone Prénom / Nom en chaîne (side-by-side) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Prénom"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/icon_color"
+                app:layout_constraintTop_toBottomOf="@id/personalInfoTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/lastNameLayout"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:layout_marginTop="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Nom"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/icon_color"
+                app:layout_constraintTop_toTopOf="@id/firstNameLayout"
+                app:layout_constraintStart_toEndOf="@id/firstNameLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- E-mail -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="E-mail"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/icon_color"
+                app:layout_constraintTop_toBottomOf="@id/firstNameLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Mot de passe -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Mot de passe"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:hintTextColor="@color/text_secondary"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/icon_color"
+                app:layout_constraintTop_toBottomOf="@id/emailLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Titre section pro -->
+            <TextView
+                android:id="@+id/professionalInfoTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Informations professionnelles"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/passwordLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Hôpital (AutoComplete) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hospitalLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Choisir un hôpital"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_hospital"
+                app:startIconTint="@color/icon_color"
+                app:layout_constraintTop_toBottomOf="@id/professionalInfoTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/hospitalDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Poste (AutoComplete) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/positionLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Choisir un poste"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/field_background"
+                app:boxStrokeColor="@color/primary_blue"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:hintTextColor="@color/text_secondary"
+                app:helperText="Sélectionnez votre fonction dans l'établissement"
+                app:helperTextTextColor="@color/text_primary"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_work"
+                app:startIconTint="@color/primary_blue"
+                app:endIconDrawable="@drawable/ic_arrow_back"
+                app:endIconTint="@color/primary_blue"
+                app:endIconMode="custom"
+                app:layout_constraintTop_toBottomOf="@id/hospitalLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/positionDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:completionThreshold="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Bouton S'inscrire -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signUpButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:text="S'inscrire"
+                android:textAllCaps="false"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_check"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/positionLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="@color/primary_red"
+                android:textColor="@color/white" />
+
+            <!-- Lien Se connecter -->
+            <TextView
+                android:id="@+id/signInLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Vous avez déjà un compte ? Se connecter"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/signUpButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

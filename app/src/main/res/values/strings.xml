@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">blooddonor</string>
+    <string name="app_slogan">Donnez, Sauvez des vies</string>
+    <string name="app_logo">App Logo</string>
+    <string name="email">Email</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Se connecter</string>
+    <string name="or_create_account">ou créer un compte</string>
+    <string name="signup_donor">S\'inscrire comme Donneur</string>
+    <string name="signup_hospital">S\'inscrire comme Hôpital</string>
+    <string-array name="staff_positions">
+        <item>Médecin</item>
+        <item>Infirmier/Infirmière</item>
+        <item>Technicien de laboratoire</item>
+        <item>Administrateur/Administratrice</item>
+        <item>Réceptionniste</item>
+    </string-array>
+</resources>
