@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    app:strokeColor="@color/light_grey"
+    app:cardElevation="0dp"
+    android:elevation="0dp"
+    app:strokeColor="@color/separator_color"
     app:strokeWidth="1dp"
     android:layout_margin="12dp">
 
@@ -19,7 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_color"
+            android:background="@color/primary_red"
             android:paddingVertical="12dp"
             android:paddingHorizontal="16dp">
 
@@ -27,7 +28,7 @@
                 android:id="@+id/tvDonationId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Donation #123"
+                android:text="@string/donation_number"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -37,10 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/ic_blood_drop"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
-                android:text="A+"
+                android:text="@string/blood_type_placeholder"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -51,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:background="@color/white">
 
             <!-- Date section -->
             <LinearLayout
@@ -64,7 +65,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_calendar"
-                    app:tint="@color/secondary_color" />
+                    app:tint="@color/primary_blue" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,17 +76,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:textColor="@color/dark_grey"
+                        android:text="@string/date"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:alpha="0.7"/>
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tvDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="March 20, 2024"
+                        android:text="@string/date_placeholder"
                         android:textColor="@color/text_primary"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -94,7 +94,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/light_grey"
+                android:background="@color/separator_color"
                 android:layout_marginVertical="12dp"/>
 
             <!-- Location section -->
@@ -108,7 +108,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_location"
-                    app:tint="@color/secondary_color" />
+                    app:tint="@color/primary_blue" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -119,17 +119,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Location"
-                        android:textColor="@color/dark_grey"
+                        android:text="@string/location"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:alpha="0.7"/>
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tvLieu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Central Hospital"
+                        android:text="@string/location_placeholder"
                         android:textColor="@color/text_primary"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -138,7 +137,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/light_grey"
+                android:background="@color/separator_color"
                 android:layout_marginVertical="12dp"/>
 
             <!-- Volume section -->
@@ -152,7 +151,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_blood_drop"
-                    app:tint="@color/secondary_color" />
+                    app:tint="@color/primary_red" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -163,17 +162,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Volume"
-                        android:textColor="@color/dark_grey"
+                        android:text="@string/volume"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:alpha="0.7"/>
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tvVolume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="450 ml"
+                        android:text="@string/volume_placeholder"
                         android:textColor="@color/text_primary"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -185,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/text_grey"
+            android:background="@color/field_background"
             android:padding="12dp">
 
             <com.google.android.material.button.MaterialButton
@@ -193,9 +191,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Share"
+                android:text="@string/share"
+                android:textColor="@color/primary_blue"
                 android:textAllCaps="false"
-                app:icon="@drawable/ic_person"
+                app:icon="@drawable/ic_share"
+                app:iconTint="@color/primary_blue"
                 app:iconGravity="textStart"
                 style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
@@ -204,10 +204,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Details"
+                android:text="@string/details"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:backgroundTint="@color/primary_color"
+                app:backgroundTint="@color/primary_blue"
                 app:cornerRadius="8dp"/>
         </LinearLayout>
     </LinearLayout>

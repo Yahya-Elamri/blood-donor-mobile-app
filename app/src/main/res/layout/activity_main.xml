@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey"
+    android:background="@color/field_background"
     tools:context=".MainActivity">
 
     <!-- App Bar with Collapsing Toolbar -->
@@ -17,10 +17,14 @@
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="@color/primary_color"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:contentScrim="@color/primary_red"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleTextAppearance="@style/ExpandedAppBarTitle"
+            app:collapsedTitleTextAppearance="@style/CollapsedAppBarTitle"
+            app:titleEnabled="false">
 
             <!-- Header Background & Summary Stats -->
             <LinearLayout
@@ -36,8 +40,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Your Impact"
-                    android:textColor="@android:color/white"
+                    android:text="@string/your_impact"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     android:alpha="0.9"/>
 
@@ -45,8 +49,8 @@
                     android:id="@+id/tvTotalDonations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8 Donations"
-                    android:textColor="@android:color/white"
+                    android:text="@string/initial_donation_count"
+                    android:textColor="@color/white"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"/>
@@ -65,7 +69,8 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp">
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="@color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -78,16 +83,16 @@
                                 android:id="@+id/tvTotalVolume"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3.6L"
-                                android:textColor="@color/primary_color"
+                                android:text="@string/initial_volume"
+                                android:textColor="@color/primary_red"
                                 android:textSize="22sp"
                                 android:textStyle="bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Volume"
-                                android:textColor="@color/text_grey"
+                                android:text="@string/total_volume"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -99,7 +104,8 @@
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp">
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="@color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -112,16 +118,16 @@
                                 android:id="@+id/tvLivesSaved"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="24"
-                                android:textColor="@color/text_primary"
+                                android:text="@string/initial_lives_saved"
+                                android:textColor="@color/primary_blue"
                                 android:textSize="22sp"
                                 android:textStyle="bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Lives Impacted"
-                                android:textColor="@color/text_grey"
+                                android:text="@string/lives_impacted"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -134,9 +140,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-                app:title="My Donations"
-                app:titleTextColor="@android:color/white"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_menu"
+                app:title="@string/my_donations"
+                app:titleTextColor="@color/white"
+                app:contentInsetStartWithNavigation="16dp"
+                android:gravity="end">
+
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <!-- Filter Chip Group -->
@@ -146,7 +157,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:background="@android:color/white"
+            android:background="@color/white"
             app:singleSelection="true"
             app:selectionRequired="true">
 
@@ -154,102 +165,82 @@
                 android:id="@+id/chipAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All"
+                android:text="@string/all"
                 android:checked="true"
-                app:chipBackgroundColor="@color/text_primary"/>
+                app:chipBackgroundColor="@color/chip_selector"
+                app:chipStrokeColor="@color/separator_color"
+                app:chipStrokeWidth="1dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This Year"
-                app:chipBackgroundColor="@color/text_primary"/>
+                android:text="@string/this_year"
+                app:chipBackgroundColor="@color/chip_selector"
+                app:chipStrokeColor="@color/separator_color"
+                app:chipStrokeWidth="1dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This Month"
-                app:chipBackgroundColor="@color/text_primary"/>
+                android:text="@string/this_month"
+                app:chipBackgroundColor="@color/chip_selector"
+                app:chipStrokeColor="@color/separator_color"
+                app:chipStrokeWidth="1dp"/>
         </com.google.android.material.chip.ChipGroup>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Content Area with RecyclerView -->
+    <!-- Content Area -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:ignore="MissingClass">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <!-- Empty State View -->
+        <LinearLayout
+            android:id="@+id/emptyStateView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="48dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_blood_drop_large"
+                app:tint="@color/icon_color"
+                android:alpha="0.7"/>
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="88dp">
+                android:text="@string/no_donations"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
 
-                <!-- Timeline Header -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Donation History"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginBottom="8dp"/>
-
-                <!-- RecyclerView for Donations -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"
-                    android:paddingHorizontal="12dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                <!-- Empty State View -->
-                <LinearLayout
-                    android:id="@+id/emptyStateView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="48dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:src="@drawable/ic_blood_drop"
-                        android:alpha="0.7"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="No donations yet"
-                        android:textColor="@color/text_primary"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your donations will appear here"
-                        android:textColor="@color/text_grey"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/donations_appear_here"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Loading Progress -->
@@ -264,7 +255,8 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/primary_red"/>
     </RelativeLayout>
 
     <!-- FAB for adding new donation -->
@@ -273,11 +265,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="New Donation"
-        android:textColor="@android:color/white"
-        app:icon="@drawable/ic_check"
-        app:iconTint="@android:color/white"
-        app:backgroundTint="@color/primary_color"
+        android:text="@string/new_donation"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
+        app:backgroundTint="@color/primary_red"
         app:layout_anchor="@id/swipeRefreshLayout"
         app:layout_anchorGravity="bottom|end"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

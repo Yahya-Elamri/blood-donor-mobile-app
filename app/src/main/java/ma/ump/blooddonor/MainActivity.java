@@ -1,10 +1,13 @@
 package ma.ump.blooddonor;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private OkHttpClient client = new OkHttpClient();
     private SharedPreferences sharedPreferences;
+    private TextView tvTotalDonations, tvTotalVolume, tvLivesSaved;
+
+    private LinearLayout emptyStateView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // FIXED: required layout manager
-
         progressBar = findViewById(R.id.progressBar);
+        tvTotalDonations = findViewById(R.id.tvTotalDonations);
+        tvTotalVolume = findViewById(R.id.tvTotalVolume);
+        tvLivesSaved = findViewById(R.id.tvLivesSaved);
+        emptyStateView = findViewById(R.id.emptyStateView);
         sharedPreferences = getSharedPreferences("my_app", MODE_PRIVATE);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         fetchDonations();
     }
@@ -55,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
         String token = AuthUtils.getAuthToken(this);
 
         if (token == null) {
-            Toast.makeText(this, "Not authenticated", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
+            // Better handling: redirect to login
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
             return;
         }
 
@@ -100,9 +112,13 @@ public class MainActivity extends AppCompatActivity {
 
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
+                            updateSummaryViews(donations);  // Add this
                             if (donations.isEmpty()) {
-                                Toast.makeText(MainActivity.this, "No donations found", Toast.LENGTH_LONG).show();
+                                emptyStateView.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
                             } else {
+                                emptyStateView.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 setupRecyclerView(donations);
                             }
                         });
@@ -132,6 +148,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void updateSummaryViews(List<Donation> donations) {
+        int donationCount = donations.size();
+        float totalVolumeMl = 0f;
+        int livesImpacted = 0;
+
+        for (Donation d : donations) {
+            float volumeMl = d.getAmount(); // e.g., 450
+            totalVolumeMl += volumeMl;
+
+            // Each 450ml saves 3 lives. Scale proportionally, cap at 3 per donation.
+            int impact = Math.round((volumeMl / 450f) * 3);
+            if (impact > 3) impact = 3; // optional: cap max lives per donation
+            livesImpacted += impact;
+        }
+
+        float totalVolumeLiters = totalVolumeMl / 1000f;
+
+
+        tvTotalDonations.setText(getString(R.string.initial_donation_count, donationCount));
+        tvTotalVolume.setText(getString(R.string.initial_volume, totalVolumeLiters));
+        tvLivesSaved.setText(getString(R.string.initial_lives_saved, livesImpacted));
+    }
     private String getUserIdFromToken(String token) {
         try {
             String[] parts = token.split("\\.");
@@ -161,17 +199,30 @@ public class MainActivity extends AppCompatActivity {
                 donations.add(new Donation(
                         obj.getLong("id"),
                         obj.getString("date"),
-                        obj.getString("lieu")
+                        obj.getString("lieu"),
+                        obj.getInt("amount") // Make sure this field exists in response
                 ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            runOnUiThread(() ->
+                    Toast.makeText(this, "Error parsing data", Toast.LENGTH_SHORT).show());
         }
         return donations;
     }
 
     private void setupRecyclerView(List<Donation> donations) {
-        DonationAdapter adapter = new DonationAdapter(donations);
-        recyclerView.setAdapter(adapter);
+        DonationAdapter donationAdapter = new DonationAdapter(donations, new DonationAdapter.OnItemClickListener() {
+            @Override
+            public void onShareClick(Donation donation) {
+                // Handle share action
+            }
+
+            @Override
+            public void onDetailsClick(Donation donation) {
+                // Handle details action
+            }
+        });
+        recyclerView.setAdapter(donationAdapter);
     }
 }

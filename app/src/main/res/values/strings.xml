@@ -16,4 +16,28 @@
         <item>Administrateur/Administratrice</item>
         <item>Réceptionniste</item>
     </string-array>
+    <string name="your_impact">Votre impact</string>
+    <string name="initial_donation_count">%1$d Dons</string>
+    <string name="total_volume">Volume total</string>
+    <string name="initial_volume">%1$.1fL</string>
+    <string name="lives_impacted">Vies affectées</string>
+    <string name="initial_lives_saved">%d</string>
+    <string name="my_donations">Mes dons</string>
+    <string name="all">Tous</string>
+    <string name="this_year">Cette année</string>
+    <string name="this_month">Ce mois</string>
+    <string name="no_donations">Aucun don pour l\'instant</string>
+    <string name="donations_appear_here">Vos dons apparaîtront ici</string>
+    <string name="new_donation">Nouveau don</string>
+    <!-- strings.xml -->
+    <string name="donation_number">Donation #%d</string>
+    <string name="blood_type_placeholder">%s</string>
+    <string name="date">Date</string>
+    <string name="date_placeholder">%s</string>
+    <string name="location">Location</string>
+    <string name="location_placeholder">%s</string>
+    <string name="volume">Volume</string>
+    <string name="volume_placeholder">%d ml</string>
+    <string name="share">Share</string>
+    <string name="details">Details</string>
 </resources>
