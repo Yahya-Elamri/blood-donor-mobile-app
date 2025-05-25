@@ -10,12 +10,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Blooddonor"
         tools:targetApi="31"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".SplashActivity"
-            android:exported="true"
-            tools:ignore="MissingClass">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/SplashTheme">
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,6 +25,7 @@
         <activity android:name=".DonorSignupActivity" />
         <activity android:name=".HospitalSignupActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".HospitalActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

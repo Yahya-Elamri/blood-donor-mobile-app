@@ -5,15 +5,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,19 +39,51 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity {
+    // Navigation drawer components
+    private DrawerLayout drawerLayout;
+    private LinearLayout navigationDrawer;
+    private MaterialToolbar toolbar;
+    private ImageView btnCloseDrawer;
+    private TextView tvUserName, tvUserEmail;
+    private LinearLayout menuMesDons, menuProfile, menuParameters, menuHelp, menuAbout, menuLogout;
+
+    // Donation list components
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private OkHttpClient client = new OkHttpClient();
-    private SharedPreferences sharedPreferences;
     private TextView tvTotalDonations, tvTotalVolume, tvLivesSaved;
-
     private LinearLayout emptyStateView;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initViews();
+        setupToolbar();
+        setupDrawerListeners();
+        setupMenuClickListeners();
+        loadUserProfile();
+        fetchDonations();
+    }
+
+    private void initViews() {
+        // Navigation drawer views
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationDrawer = findViewById(R.id.navigationDrawer);
+        toolbar = findViewById(R.id.toolbar);
+        btnCloseDrawer = findViewById(R.id.btnCloseDrawer);
+        tvUserName = findViewById(R.id.tvUserName);
+        tvUserEmail = findViewById(R.id.tvUserEmail);
+        menuMesDons = findViewById(R.id.menuMesDons);
+        menuProfile = findViewById(R.id.menuProfile);
+        menuParameters = findViewById(R.id.menuParameters);
+        menuHelp = findViewById(R.id.menuHelp);
+        menuAbout = findViewById(R.id.menuAbout);
+        menuLogout = findViewById(R.id.menuLogout);
+
+        // Donation list views
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
         tvTotalDonations = findViewById(R.id.tvTotalDonations);
@@ -56,8 +93,49 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("my_app", MODE_PRIVATE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        fetchDonations();
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            if (drawerLayout.isDrawerOpen(navigationDrawer)) {
+                drawerLayout.closeDrawer(navigationDrawer);
+            } else {
+                drawerLayout.openDrawer(navigationDrawer);
+            }
+        });
+    }
+
+    private void setupDrawerListeners() {
+        btnCloseDrawer.setOnClickListener(v -> drawerLayout.closeDrawer(navigationDrawer));
+    }
+
+    private void setupMenuClickListeners() {
+        menuMesDons.setOnClickListener(v -> handleMenuClick("MES DONS"));
+        menuProfile.setOnClickListener(v -> handleMenuClick("Profile"));
+        menuParameters.setOnClickListener(v -> handleMenuClick("Paramètres"));
+        menuHelp.setOnClickListener(v -> handleMenuClick("Aide & Support"));
+        menuAbout.setOnClickListener(v -> handleMenuClick("À propos"));
+        menuLogout.setOnClickListener(v -> handleLogout());
+    }
+
+    private void loadUserProfile() {
+        String token = AuthUtils.getAuthToken(this);
+        if (token != null) {
+            try {
+                String[] parts = token.split("\\.");
+                String payload = new String(Base64.decode(addBase64Padding(parts[1]), Base64.URL_SAFE));
+                JSONObject payloadJson = new JSONObject(payload);
+
+                String name = payloadJson.optString("name", "Utilisateur");
+                String email = payloadJson.optString("email", "email@example.com");
+
+                tvUserName.setText(name);
+                tvUserEmail.setText(email);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void fetchDonations() {
@@ -224,5 +302,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(donationAdapter);
+    }
+    private void handleMenuClick(String menuItem) {
+        drawerLayout.closeDrawer(navigationDrawer);
+        switch (menuItem) {
+            case "Profile":
+                startActivity(new Intent(this, ProfileActivity.class));
+                break;
+            case "Paramètres":
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case "Aide & Support":
+                startActivity(new Intent(this, HelpActivity.class));
+                break;
+            case "À propos":
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+        }
+    }
+
+    private void handleLogout() {
+        new AlertDialog.Builder(this)
+                .setTitle("Déconnexion")
+                .setMessage("Êtes-vous sûr de vouloir vous déconnecter ?")
+                .setPositiveButton("Oui", (dialog, which) -> performLogout())
+                .setNegativeButton("Annuler", null)
+                .show();
+    }
+
+    private void performLogout() {
+        AuthUtils.clearAuthCredentials(this);
+        startActivity(new Intent(this, LoginActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        finish();
     }
 }

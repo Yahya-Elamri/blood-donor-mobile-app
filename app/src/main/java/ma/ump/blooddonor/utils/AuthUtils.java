@@ -2,9 +2,14 @@ package ma.ump.blooddonor.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
+
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 
 public class AuthUtils {
     private static final String TAG = "AuthUtils";
@@ -78,8 +83,30 @@ public class AuthUtils {
                     + ", Expires: " + expiresAt);
             return true;
         }
-
+        Log.w(TAG, "Token expired or nearing expiration. Current: " + currentTime
+                + ", Expires: " + expiresAt);
         return false;
+    }
+
+    public static String getTokenRole(Context context) {
+        try {
+            String token = getAuthToken(context);
+            if (token == null) return null;
+
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) return null;
+
+            String payload = new String(
+                    Base64.decode(parts[1], Base64.URL_SAFE),
+                    StandardCharsets.UTF_8
+            );
+
+            JSONObject json = new JSONObject(payload);
+            return json.optString("role", null);
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing token role", e);
+            return null;
+        }
     }
 
     public static void clearAuthCredentials(Context context) {

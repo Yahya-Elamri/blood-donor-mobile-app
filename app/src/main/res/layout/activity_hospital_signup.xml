@@ -174,7 +174,7 @@
             <!-- Hôpital (AutoComplete) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/hospitalLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Choisir un hôpital"
@@ -192,7 +192,11 @@
                     android:id="@+id/hospitalDropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:completionThreshold="1"
+                    android:dropDownHeight="300dp"
+                    android:dropDownWidth="match_parent"
+                    android:dropDownVerticalOffset="8dp"
+                    android:backgroundTint="@android:color/transparent"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Poste (AutoComplete) -->
