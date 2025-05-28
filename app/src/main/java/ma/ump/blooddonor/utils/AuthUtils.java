@@ -2,6 +2,7 @@ package ma.ump.blooddonor.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;

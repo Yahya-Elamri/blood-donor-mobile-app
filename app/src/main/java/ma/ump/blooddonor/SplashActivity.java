@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
 
+import ma.ump.blooddonor.donorActivity.MainActivity;
+import ma.ump.blooddonor.hospitalActivity.HospitalActivity;
 import ma.ump.blooddonor.utils.AuthUtils;
 
 public class SplashActivity extends AppCompatActivity {

@@ -24,8 +24,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".DonorSignupActivity" />
         <activity android:name=".HospitalSignupActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".HospitalActivity" />
+        <activity android:name=".donorActivity.MainActivity" />
+        <activity android:name=".hospitalActivity.HospitalActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

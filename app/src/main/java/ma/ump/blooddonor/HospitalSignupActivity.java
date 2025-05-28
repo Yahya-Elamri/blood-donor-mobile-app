@@ -5,7 +5,10 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +23,7 @@ import java.util.List;
 
 import ma.ump.blooddonor.adapter.HospitalAdapter;
 import ma.ump.blooddonor.entity.Hospital;
+import ma.ump.blooddonor.entity.HospitalUser;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -27,143 +31,207 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Callback;
 
+import android.content.Intent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
+
+import okhttp3.*;
+
+
 public class HospitalSignupActivity extends AppCompatActivity {
-    private OkHttpClient client = new OkHttpClient();
-    private HospitalAdapter hospitalAdapter;
-    private Handler handler = new Handler(Looper.getMainLooper());
+
+    // Network
+    private final OkHttpClient client = new OkHttpClient();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
+
+    // Adapter
+    private HospitalAdapter hospitalAdapter;
+
+    // Views
     private AutoCompleteTextView hospitalDropdown;
+    private EditText emailInput, passwordInput, firstNameInput, lastNameInput;
+    private MaterialButton signUpButton;
+    private AutoCompleteTextView positionInput;
+    private TextInputLayout positionLayout;
+    // Data
+    private Hospital selectedHospital;
+
+    private String selectedPosition = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital_signup);
 
-        // Setup AutoCompleteTextView
+        initializeViews();
+        setupHospitalSearch();
+        setupPositionDropdown();
+        setupSignUpButton();
+    }
+
+    private void initializeViews() {
+        // Hospital Search
         hospitalDropdown = findViewById(R.id.hospitalDropdown);
-
-        // Initialize adapter with empty list
-        hospitalAdapter = new HospitalAdapter(this, new ArrayList<>());
+        hospitalAdapter = new HospitalAdapter(this,new ArrayList<>());
         hospitalDropdown.setAdapter(hospitalAdapter);
-
-        // Set threshold to trigger dropdown
         hospitalDropdown.setThreshold(1);
 
-        // Optional: Add some test data to verify dropdown works
-        addTestData();
+        // Form Fields
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        firstNameInput = findViewById(R.id.firstNameInput);
+        lastNameInput = findViewById(R.id.lastNameInput);
+        positionInput = findViewById(R.id.positionInput);
+        positionLayout = findViewById(R.id.positionLayout);
+        signUpButton = findViewById(R.id.signUpButton);
+    }
 
+    private void setupPositionDropdown() {
+        // Get the string array from resources
+        String[] positions = getResources().getStringArray(R.array.staff_positions);
+
+        // Create adapter with the string array
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                positions
+        );
+
+        // Set the adapter to the AutoCompleteTextView
+        positionInput.setAdapter(adapter);
+
+        // Store selected position in variable
+        positionInput.setOnItemClickListener((parent, view, position, id) -> {
+            selectedPosition = (String) parent.getItemAtPosition(position);
+            positionLayout.setError(null);
+        });
+    }
+
+    public String getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    private void setupHospitalSearch() {
         hospitalDropdown.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Cancel previous requests
-                if (searchRunnable != null) {
-                    handler.removeCallbacks(searchRunnable);
-                }
-
-                // Debounce search by 300ms
+                handler.removeCallbacks(searchRunnable);
                 searchRunnable = () -> searchHospitals(s.toString());
                 handler.postDelayed(searchRunnable, 300);
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
         hospitalDropdown.setOnItemClickListener((parent, view, position, id) -> {
-            Hospital selected = hospitalAdapter.getItem(position);
-            if (selected != null) {
-                Log.d("Hospital", "Selected: " + selected.getNom());
-            }
+            selectedHospital = hospitalAdapter.getItem(position);
+            if (selectedHospital.getId() == -1L) selectedHospital = null; // Handle "no results" item
         });
+    }
 
-        // Optional: Handle focus and click to show dropdown
-        hospitalDropdown.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus && hospitalDropdown.getText().length() >= 1) {
-                hospitalDropdown.showDropDown();
-            }
-        });
 
-        hospitalDropdown.setOnClickListener(v -> {
-            if (hospitalDropdown.getText().length() >= 1) {
-                hospitalDropdown.showDropDown();
+    private void setupSignUpButton() {
+        signUpButton.setOnClickListener(v -> {
+            if (validateForm()) {
+                registerUser(createHospitalUser());
             }
         });
     }
 
-    // Temporary method to test if dropdown works with static data
-    private void addTestData() {
-        List<Hospital> testHospitals = new ArrayList<>();
-        testHospitals.add(new Hospital(1L, "Hôpital Test 1", "Adresse 1", "123456789"));
-        testHospitals.add(new Hospital(2L, "Hôpital Test 2", "Adresse 2", "987654321"));
+    private boolean validateForm() {
+        boolean isValid = true;
 
-        hospitalAdapter.clear();
-        hospitalAdapter.addAll(testHospitals);
-        hospitalAdapter.notifyDataSetChanged();
+        if (firstNameInput.getText().toString().trim().isEmpty()) {
+            firstNameInput.setError("First name required");
+            isValid = false;
+        }
+
+        if (lastNameInput.getText().toString().trim().isEmpty()) {
+            lastNameInput.setError("Last name required");
+            isValid = false;
+        }
+
+        if (emailInput.getText().toString().trim().isEmpty()) {
+            emailInput.setError("Email required");
+            isValid = false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput.getText()).matches()) {
+            emailInput.setError("Invalid email format");
+            isValid = false;
+        }
+
+        if (passwordInput.getText().toString().trim().isEmpty()) {
+            passwordInput.setError("Password required");
+            isValid = false;
+        }
+
+        if (positionInput.getText().toString().trim().isEmpty()) {
+            positionInput.setError("Position required");
+            isValid = false;
+        }
+
+        if (selectedHospital == null) {
+            Toast.makeText(this, "Please select a hospital", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    private HospitalUser createHospitalUser() {
+        return new HospitalUser(
+                emailInput.getText().toString().trim(),
+                passwordInput.getText().toString().trim(),
+                lastNameInput.getText().toString().trim(),
+                firstNameInput.getText().toString().trim(),
+                getSelectedPosition(),
+                selectedHospital
+        );
     }
 
     private void searchHospitals(String query) {
-        if (query.length() < 2) {
-            // Show test data for short queries or clear
-            addTestData();
-            return;
-        }
+        if (query.length() < 2) return;
 
-        Log.d("Hospital", "Searching for: " + query);
-
-        HttpUrl url = HttpUrl.parse("http://10.0.2.2:8080/api/hospitals/search")
-                .newBuilder()
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host("10.0.2.2")
+                .port(8080)
+                .addPathSegments("api/hospitals/search")
                 .addQueryParameter("name", query)
                 .build();
 
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
+        client.newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("Hospital", "Network error", e);
-                runOnUiThread(() -> {
-                    Toast.makeText(HospitalSignupActivity.this, "Network error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    // Show test data on network error
-                    addTestData();
-                });
+                runOnUiThread(() -> showError("Network error: " + e.getMessage()));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseData = response.body().string();
-                    Log.d("Hospital", "Response: " + responseData);
-
-                    List<Hospital> hospitals = parseHospitalData(responseData);
-                    runOnUiThread(() -> {
-                        hospitalAdapter.clear();
-                        if (hospitals.isEmpty()) {
-                            // Add a "no results" item
-                            hospitals.add(new Hospital(-1L, "Aucun résultat trouvé", "", ""));
-                        }
-                        hospitalAdapter.addAll(hospitals);
-                        hospitalAdapter.notifyDataSetChanged();
-
-                        // Show dropdown if it's not visible
-                        if (hospitalDropdown.hasFocus()) {
-                            hospitalDropdown.showDropDown();
-                        }
-                    });
-                } else {
-                    Log.e("Hospital", "HTTP Error: " + response.code() + " - " + response.message());
-                    runOnUiThread(() -> {
-                        Toast.makeText(HospitalSignupActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
-                        // Show test data on HTTP error
-                        addTestData();
-                    });
-                }
+                handleSearchResponse(response);
             }
+        });
+    }
+
+    private void handleSearchResponse(Response response) throws IOException {
+        if (!response.isSuccessful()) {
+            runOnUiThread(() -> showError("Server error: " + response.code()));
+            return;
+        }
+
+        String responseData = response.body().string();
+        List<Hospital> hospitals = parseHospitalData(responseData);
+
+        runOnUiThread(() -> {
+            hospitalAdapter.clear();
+            if (hospitals.isEmpty()) {
+                hospitals.add(new Hospital(-1L, "No results found", "", ""));
+            }
+            hospitalAdapter.addAll(hospitals);
+            hospitalAdapter.notifyDataSetChanged();
         });
     }
 
@@ -171,22 +239,86 @@ public class HospitalSignupActivity extends AppCompatActivity {
         List<Hospital> hospitals = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(json);
-            Log.d("Hospital", "Parsing " + jsonArray.length() + " hospitals");
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                Hospital hospital = new Hospital(
+                hospitals.add(new Hospital(
                         obj.getLong("id"),
                         obj.getString("nom"),
                         obj.optString("adresse"),
                         obj.optString("telephone")
-                );
-                hospitals.add(hospital);
-                Log.d("Hospital", "Added: " + hospital.getNom());
+                ));
             }
         } catch (JSONException e) {
             Log.e("Hospital", "JSON parsing error", e);
         }
         return hospitals;
     }
+
+    private void registerUser(HospitalUser user) {
+        try {
+            JSONObject json = new JSONObject()
+                    .put("email", user.getEmail())
+                    .put("password", user.getPassword())
+                    .put("nom", user.getNom())
+                    .put("prenom", user.getPrenom())
+                    .put("position", user.getPosition())
+                    .put("hospital", new JSONObject()
+                            .put("id", user.getHospital().getId()));
+
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:8080/api/auth/signup/hospial-user")
+                    .post(RequestBody.create(json.toString(), MediaType.parse("application/json")))
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(() -> showError("Registration failed: " + e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    handleRegistrationResponse(response.code(), response.body().string());
+                }
+            });
+
+        } catch (JSONException e) {
+            showError("Error creating registration data");
+        }
+    }
+
+    private void handleRegistrationResponse(int code, String response) {
+        runOnUiThread(() -> {
+            Log.d("Registration", "Response code: " + code + " | Body: " + response);
+
+            if (code == 201) {
+                Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            } else {
+                try {
+                    // Handle non-JSON responses
+                    if (response.startsWith("{") && response.endsWith("}")) {
+                        JSONObject error = new JSONObject(response);
+                        showError(error.optString("message", "Registration failed"));
+                    } else {
+                        showError("Server error: " + response);
+                    }
+                } catch (JSONException e) {
+                    showError("Server returned unexpected format: " + response);
+                }
+            }
+        });
+    }
+
+    private void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        client.dispatcher().cancelAll();
+    }
+
 }

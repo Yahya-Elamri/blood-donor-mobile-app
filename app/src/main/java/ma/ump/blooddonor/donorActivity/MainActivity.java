@@ -1,4 +1,4 @@
-package ma.ump.blooddonor;
+package ma.ump.blooddonor.donorActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ma.ump.blooddonor.LoginActivity;
+import ma.ump.blooddonor.R;
 import ma.ump.blooddonor.adapter.DonationAdapter;
 import ma.ump.blooddonor.entity.Donation;
 import ma.ump.blooddonor.utils.AuthUtils;

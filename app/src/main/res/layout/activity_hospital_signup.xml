@@ -193,7 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:completionThreshold="1"
-                    android:dropDownHeight="300dp"
+                    android:dropDownHeight="wrap_content"
                     android:dropDownWidth="match_parent"
                     android:dropDownVerticalOffset="8dp"
                     android:backgroundTint="@android:color/transparent"/>
@@ -219,20 +219,23 @@
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_work"
                 app:startIconTint="@color/primary_blue"
-                app:endIconDrawable="@drawable/ic_arrow_back"
-                app:endIconTint="@color/primary_blue"
-                app:endIconMode="custom"
+                app:endIconMode="dropdown_menu"
                 app:layout_constraintTop_toBottomOf="@id/hospitalLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <AutoCompleteTextView
-                    android:id="@+id/positionDropdown"
+                    android:id="@+id/positionInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:cursorVisible="false"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
                     android:textSize="16sp"
                     android:textColor="@color/text_primary"
                     android:completionThreshold="1" />
