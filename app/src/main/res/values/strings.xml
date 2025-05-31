@@ -53,4 +53,10 @@
         <item>O+</item>
         <item>O-</item>
     </string-array>
+    <string name="hospital_icon">Hospital Icon</string>
+    <string name="contact_info">Contact Information</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="profile_icon">Profile Icon</string>
+    <string name="contact_information">Contact Information</string>
+    <string name="default_notification_channel_id">blood_requests_channel</string>
 </resources>

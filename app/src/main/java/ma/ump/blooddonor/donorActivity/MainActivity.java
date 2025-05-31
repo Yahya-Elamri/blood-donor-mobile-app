@@ -1,9 +1,13 @@
 package ma.ump.blooddonor.donorActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,11 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +69,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("FCM_TEST", "Token failed", task.getException());
+                        return;
+                    }
+
+                    String token = task.getResult();
+                    Log.d("FCM_TEST", "Token: " + token);
+
+                    // Test if token is valid
+                    FirebaseMessaging.getInstance().subscribeToTopic("test")
+                            .addOnCompleteListener(subTask -> {
+                                if (subTask.isSuccessful()) {
+                                    Log.d("FCM_TEST", "Subscribed to test topic");
+                                } else {
+                                    Log.e("FCM_TEST", "Topic subscription failed", subTask.getException());
+                                }
+                            });
+                });
+
         initViews();
+        requestNotificationPermission();
         setupToolbar();
         setupDrawerListeners();
         setupMenuClickListeners();
@@ -70,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
         fetchDonations();
     }
 
+    // In MainActivity.java
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        100);
+            }
+        }
+    }
     private void initViews() {
         // Navigation drawer views
         drawerLayout = findViewById(R.id.drawerLayout);

@@ -1,6 +1,7 @@
 package ma.ump.blooddonor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +13,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.VolleyError;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import ma.ump.blooddonor.api.ApiClient;
 import ma.ump.blooddonor.donorActivity.MainActivity;
 import ma.ump.blooddonor.hospitalActivity.HospitalActivity;
 import ma.ump.blooddonor.utils.AuthUtils;
+import ma.ump.blooddonor.utils.OkHttpUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -116,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case "DONOR":
             default: // Handle unexpected roles as donors
+                sendFcmTokenToServer();
                 intent = new Intent(this, MainActivity.class);
                 break;
         }
@@ -149,5 +155,26 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendFcmTokenToServer() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String token = task.getResult();
+                SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                String userId = AuthUtils.getTokenId(this);
+
+                System.out.println(userId + "login " +token);
+                if (userId != null) {
+                    new Thread(() -> {
+                        try {
+                            OkHttpUtils.registerFcmToken(userId, token);
+                        } catch (IOException e) {
+                            Log.e("Login", "Failed to send FCM token", e);
+                        }
+                    }).start();
+                }
+            }
+        });
     }
 }

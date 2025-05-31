@@ -23,14 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.callback.Callback;
 
 import ma.ump.blooddonor.R;
-import ma.ump.blooddonor.utils.AuthUtils;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class DashboardFragment extends Fragment {
 
