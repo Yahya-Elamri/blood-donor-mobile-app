@@ -110,6 +110,28 @@ public class AuthUtils {
         }
     }
 
+    public static String getTokenId(Context context) {
+        try {
+            String token = getAuthToken(context);
+            if (token == null) return null;
+
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) return null;
+
+            String payload = new String(
+                    Base64.decode(parts[1], Base64.URL_SAFE),
+                    StandardCharsets.UTF_8
+            );
+
+            JSONObject json = new JSONObject(payload);
+            return json.optString("id", null);
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing token id", e);
+            return null;
+        }
+    }
+
+
     public static void clearAuthCredentials(Context context) {
         try {
             SharedPreferences prefs = getEncryptedPreferences(context);

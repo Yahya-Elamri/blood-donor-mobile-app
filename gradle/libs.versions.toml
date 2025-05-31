@@ -10,6 +10,7 @@ constraintlayout = "2.2.1"
 volley = "1.2.1"
 securityCrypto = "1.0.0"
 swiperefreshlayout = "1.1.0"
+firebaseMessaging = "24.1.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -22,6 +23,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

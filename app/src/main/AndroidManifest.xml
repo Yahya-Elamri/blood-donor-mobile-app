@@ -2,9 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Add vibration permission for richer notifications -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,9 +20,27 @@
         tools:targetApi="31"
         android:usesCleartextTraffic="true"
         android:theme="@style/SplashTheme">
+
+        <!-- Notification Channel ID - MUST be defined in strings.xml -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <!-- Firebase Messaging Service -->
+        <service
+            android:name=".api.FirebaseMessageService"
+            android:exported="false"
+            android:stopWithTask="false"> <!-- Keep this service running even when app is closed -->
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Activities -->
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,5 +52,4 @@
         <activity android:name=".donorActivity.MainActivity" />
         <activity android:name=".hospitalActivity.HospitalActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -1,0 +1,53 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorOnSurface">
+
+    <!-- Medical bag body -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/black"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M6,8 L18,8 Q20,8 20,10 L20,18 Q20,20 18,20 L6,20 Q4,20 4,18 L4,10 Q4,8 6,8 Z" />
+
+    <!-- Bag handles -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/black"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M8,8 L8,6 Q8,4 10,4 L14,4 Q16,4 16,6 L16,8" />
+
+    <!-- Medical cross vertical line -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/black"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M12,11 L12,17" />
+
+    <!-- Medical cross horizontal line -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/black"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M9,14 L15,14" />
+
+    <!-- Bag clasp -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/black"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M11,6 L13,6 Q13,6 13,7 L13,7 Q13,8 13,8 L11,8 Q11,8 11,7 L11,7 Q11,6 11,6 Z" />
+
+</vector>

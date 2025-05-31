@@ -13,6 +13,7 @@ import ma.ump.blooddonor.fragments.AppointmentsFragment;
 import ma.ump.blooddonor.fragments.BloodStockFragment;
 import ma.ump.blooddonor.fragments.DashboardFragment;
 import ma.ump.blooddonor.fragments.StaffManagementFragment;
+import ma.ump.blooddonor.utils.AuthUtils;
 
 public class HospitalActivity extends AppCompatActivity {
 
@@ -25,6 +26,8 @@ public class HospitalActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(this::onNavigationItemSelected);
+
+        System.out.println(AuthUtils.getAuthToken(this));
 
         // Load default fragment
         if (savedInstanceState == null) {

@@ -1,22 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:background="@color/white">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Blood Stock"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bloodStockRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
+        <!-- Header Section -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_blue"
+            android:padding="24dp">
 
-</LinearLayout>
+            <ImageView
+                android:id="@+id/headerIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_hospital"
+                app:tint="@color/white"
+                android:layout_marginEnd="16dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/headerIcon"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Demande de Sang"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Interface Personnel Hospitalier"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_marginTop="2dp"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- Form Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="8dp">
+
+            <!-- Blood Type Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/separator_color"
+                app:cardBackgroundColor="@color/field_background"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Groupe Sanguin Requis *"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/bloodTypeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quantity Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/separator_color"
+                app:cardBackgroundColor="@color/field_background"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:startIconDrawable="@drawable/ic_medical_bag"
+                    app:startIconTint="@color/primary_blue"
+                    app:endIconMode="clear_text"
+                    app:boxStrokeColor="@color/primary_blue"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:layout_margin="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/quantityInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Quantité (unités) *"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Urgency Level Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/separator_color"
+                app:cardBackgroundColor="@color/field_background"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Niveau d'Urgence *"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/urgencySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Required Fields Info -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* Champs obligatoires"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="16dp"
+                android:fontStyle="italic"/>
+
+            <!-- Submit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Créer la Demande de Sang"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_add"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/primary_red"
+                style="@style/Widget.MaterialComponents.Button"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </LinearLayout>
+</ScrollView>
