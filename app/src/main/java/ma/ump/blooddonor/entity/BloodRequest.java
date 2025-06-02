@@ -6,7 +6,22 @@ public class BloodRequest {
     private String dateDemande;
     private RequestStatus statut;
     private UrgenceLevel urgence;
+    private String patientInfo;
 
+    public BloodRequest() {}
+
+    public BloodRequest(BloodType bloodType,int quantite, UrgenceLevel urgence) {
+        this.quantite=quantite;
+        this.groupeSanguin=bloodType;
+        this.urgence=urgence;
+    }
+
+    public String getPatientInfo() {
+        return patientInfo;
+    }
+    public void setPatientInfo(String patientInfo) {
+        this.patientInfo = patientInfo;
+    }
     // Getters and setters
     public BloodType getGroupeSanguin() { return groupeSanguin; }
     public void setGroupeSanguin(BloodType groupeSanguin) { this.groupeSanguin = groupeSanguin; }

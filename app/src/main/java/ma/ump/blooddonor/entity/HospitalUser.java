@@ -1,6 +1,7 @@
 package ma.ump.blooddonor.entity;
 
 public class HospitalUser {
+    private Long id;
     private String email;
     private String password;
     private String nom;
@@ -20,6 +21,10 @@ public class HospitalUser {
     }
 
     // Getters and optionally setters
+    public Long getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }

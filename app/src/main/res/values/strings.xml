@@ -59,4 +59,8 @@
     <string name="profile_icon">Profile Icon</string>
     <string name="contact_information">Contact Information</string>
     <string name="default_notification_channel_id">blood_requests_channel</string>
+    <string name="total_requests">Total Requests</string>
+    <string name="pending_requests">Pending</string>
+    <string name="critical_requests">Critical</string>
+    <string name="fulfilled_requests">Fulfilled</string>
 </resources>

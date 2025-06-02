@@ -9,7 +9,6 @@ public class Hospital {
     private String nom;
     private String adresse;
     private String telephone;
-
     public Hospital() {}
 
     public Hospital(Long id, String nom, String adresse, String telephone) {
@@ -17,6 +16,26 @@ public class Hospital {
         this.nom = nom;
         this.adresse = adresse;
         this.telephone = telephone;
+    }
+
+    private List<BloodRequest> demandes = new ArrayList<>();
+    private List<HospitalUser> staff = new ArrayList<>();
+
+    // Add getters and setters
+    public List<BloodRequest> getDemandes() {
+        return demandes;
+    }
+
+    public void setDemandes(List<BloodRequest> demandes) {
+        this.demandes = demandes;
+    }
+
+    public List<HospitalUser> getStaff() {
+        return staff;
+    }
+
+    public void setStaff(List<HospitalUser> staff) {
+        this.staff = staff;
     }
 
     // Getters

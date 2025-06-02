@@ -14,4 +14,11 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="dark_grey">#212121</color>
+    <color name="card_total">#3F51B5</color>
+    <color name="card_pending">#FF9800</color>
+    <color name="card_critical">#F44336</color>
+    <color name="card_fulfilled">#4CAF50</color>
+    <color name="alert_red">#F44336</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="success_green">#4CAF50</color>
 </resources>
